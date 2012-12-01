@@ -1,4 +1,5 @@
 from hyde.plugin import Plugin
+import re
 
 
 """
@@ -20,7 +21,6 @@ stored as independent source files for each comment.
 # - meta.comments = True enables them
 
 
-
 def metaData(r, *args) :
 	for attribute in args :
 		try: return r.meta.to_dict()[attribute]
@@ -33,6 +33,9 @@ def metaData(r, *args) :
 class CommentsPlugin(Plugin) :
 	def __init__(self, site) :
 		super(CommentsPlugin, self).__init__(site)
+		self._stripMeta = re.compile(
+			r"^\s*(?:---|===)\s*\n((?:.|\n)+?)\n\s*(?:---|===)\s*\n*",
+			re.MULTILINE)
 
 	def begin_site(self) :
 		comments = {}
@@ -42,13 +45,16 @@ class CommentsPlugin(Plugin) :
 			comments[thread].append(c)
 		for r in self.site.content.walk_resources() :
 			if r.source_file.kind != 'comment' : continue
-			r.is_processable = False
-			r.meta.listable=False
-			r.uses_template=False
 			if r.meta.id in comments :
 				raise ValueError(
 					"Repeated comment id '%s' in comments %s and %s" %(
 						r.meta.id, r, comments[r.meta.id],))
+			r.is_processable = False
+			r.meta.listable=False
+			r.uses_template=False
+			text = r.source_file.read_all()
+			match = re.match(self._stripMeta, text)
+			r.text = text[match.end():]
 			appendComment(r)
 		self.site.comments = comments
 
@@ -57,6 +63,7 @@ class CommentsPlugin(Plugin) :
 		if 'id' not in resource.meta.to_dict() : return
 		comments = self.site.comments.get(resource.meta.id,[])
 		resource.ncomments = len(comments)
+		resource.comments = comments
 
 
 

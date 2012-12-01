@@ -1,9 +1,31 @@
 {# -*- html -*- #}
 
-{%- if resource.meta.comments %}
+{%- if resource.meta.comments %}{# comments enabled in metadata? #}
 
 <h2>Comments</h2>
 <h3>{{ resource.ncomments }} comments.</h3>
 
+{% set comments = resource.comments %}
+{% if comments %}
+<ul class='comment-thread'>
+{% for comment in comments | sort(attribute='meta.published') %}
+	<li class='comment'>
+	<div class='comment-head'>
+	<a class='comment-avatar' target='_'
+		href='{{comment.meta.authoruri|default("#")}}'>
+		<img src='{{comment.meta.avataruri}}' /></a>
+	<a class='comment-author' target='_'
+		href='{{comment.meta.authoruri}}'>{{
+			comment.meta.author
+			}}</a>
+	<div class='comment-title'>{{comment.meta.title}}</div>
+	<div class='comment-timestamp'>{{comment.meta.published}}</div>
+	</div>
+	<div class='comment-text'>
+	{{ comment.text | markdown }}
+	</div>
+	</li>
+{% endfor%}
+</ul>
 {% endif %}
-
+{% endif %}
