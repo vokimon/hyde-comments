@@ -24,7 +24,7 @@ stored as independent source files for each comment.
 def metaData(r, *args) :
 	for attribute in args :
 		try: return r.meta.to_dict()[attribute]
-		except AttributeError, e :
+		except KeyError, e :
 			if e.args[0] != attribute : raise
 	raise AttributeError(
 		"Comment %s should define any metadata attributes of %s"%(
@@ -35,7 +35,11 @@ class CommentsPlugin(Plugin) :
 		super(CommentsPlugin, self).__init__(site)
 
 	def begin_site(self) :
-		comments = []
+		comments = {}
+		def appendComment(c) :
+			thread = metaData(c, "thread", "inreplyto")
+			if thread not in comments : comments[thread] = []
+			comments[thread].append(c)
 		for r in self.site.content.walk_resources() :
 			if r.source_file.kind != 'comment' : continue
 			r.is_processable = False
@@ -44,20 +48,14 @@ class CommentsPlugin(Plugin) :
 			if r.meta.id in comments :
 				raise ValueError(
 					"Repeated comment id '%s' in comments %s and %s" %(
-						r.meta.id,
-						r,
-						comments[r.meta.id],
-						))
-			comments.append(r)
+						r.meta.id, r, comments[r.meta.id],))
+			appendComment(r)
 		self.site.comments = comments
 
 	def begin_text_resource(self, resource, text) :
 		if resource.source_file.kind == 'comment': return
 		if 'id' not in resource.meta.to_dict() : return
-		comments = []
-		for comment in self.site.comments :
-			if comment.meta.thread == resource.meta.id : 
-				comments.append(comment)
+		comments = self.site.comments.get(resource.meta.id,[])
 		resource.ncomments = len(comments)
 
 

@@ -1,0 +1,13 @@
+---
+id: multiple-comments-000003
+thread: multiple-comments
+title: First comment
+published: !!timestamp '2012-12-01 03:00:00'
+updated: !!timestamp '2012-12-01 03:00:00'
+author: First Commenter
+authoruri: http://knowyourmeme.com/memes/first
+authoremail: http://knowyourmeme.com/memes/first
+---
+
+This one has no no 'inreplyto' but just 'thread' metadata
+
