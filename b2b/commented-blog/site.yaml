@@ -9,7 +9,6 @@ plugins:
     - ext.staticcomments.CommentsPlugin
     - hyde.ext.plugins.sorter.SorterPlugin
     - hyde.ext.plugins.tagger.TaggerPlugin
-    - hyde.ext.plugins.syntext.SyntextPlugin
     - hyde.ext.plugins.textlinks.TextlinksPlugin
 context:
     data:
@@ -32,7 +31,10 @@ context:
 meta:
     nodemeta: meta.yaml
     created: !!timestamp 2010-01-01 00:00:00
-    author: Lakshmi Vyasarajan
+    charset: utf-8
+    author: David García Garzón
+    site_title: Commented Blog
+    site_subtitle: An example of using comments in Hyde
 sorter:
     time:
         attr:
@@ -52,3 +54,4 @@ tagger:
             archive_extension: html
             meta:
                 listable: false
+
