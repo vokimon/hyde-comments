@@ -42,7 +42,7 @@ Design forces
 -------------
 
 
-## Comment rendering
+### Comment rendering
 
 How/when to render the comments within a post?
 
