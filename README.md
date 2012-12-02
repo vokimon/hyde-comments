@@ -60,6 +60,10 @@ What is to be implemented:
 	- Generate dependencies on comments
 	- Configurable default gravatar mode
 	- Configurable message for unable to send more messages
+- Security concerns on comment content
+	- Strip html tags
+	- Spam links
+	- Email addresses
 - Comment submission form
 	- Submission form with hidden inreplyto and thread
 	- Server script (php?) to build the comment file and submit it by email
