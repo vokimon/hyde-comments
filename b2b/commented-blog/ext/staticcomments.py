@@ -100,13 +100,14 @@ class CommentsPlugin(Plugin) :
 			r.text = contentWithoutMeta(r)
 			r.meta.avataruri = commentAvatar(r)
 			appendComment(r)
+			self.logger.debug("Comment found: %s of thread %s, replying %s"%(r.slug,r.meta.thread,r.meta.inreplyto))
 		for thread in comments.values() :
 			thread.sort(key=lambda x : x.meta.published)
 			def debug(*args): print args; return args
 			id_to_comment = dict(( (c.meta.id, c) for c in thread ))
 			for comment in thread :
 				if comment.meta.inreplyto in id_to_comment :
-					print "Children found", comment.meta.id, "of", comment.meta.inreplyto
+					self.logger.debug("Children found: %s of %s"%(comment.meta.id, comment.meta.inreplyto))
 					parent = id_to_comment[comment.meta.inreplyto]
 					parent.thread_children.append(comment)
 					thread.remove(comment)
@@ -119,7 +120,9 @@ class CommentsPlugin(Plugin) :
 			return sum((recursiveCount(c.thread_children) for c in comments), len(comments))
 		if resource.source_file.kind == 'comment': return
 		if 'id' not in resource.meta.to_dict() :
-			resource.meta.id = resource.slug
+			resource.ncomments = 0
+			resource.comments = []
+			return
 		comments = self.site.comments.get(resource.meta.id,[])
 		resource.ncomments = recursiveCount(comments)
 		resource.comments = comments
