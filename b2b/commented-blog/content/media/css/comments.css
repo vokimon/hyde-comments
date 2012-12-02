@@ -1,0 +1,87 @@
+ul.comment-thread
+{
+	padding-left: 36px;
+}
+
+ul.comment-thread li.comment
+{
+	list-style-type: none;
+}
+
+ul.comment-thread li.comment div.comment-head
+{
+	padding: 2px;
+}
+
+ul.comment-thread li.comment div.comment-text
+{
+	padding-left: 15pt;
+}
+
+.comment-avatar
+{
+	padding: 0;
+	margin: 3px;
+	clear: left;
+	float: left;
+	margin-right: 1em;
+	display: block;
+	width: 32px;
+	height: 32px;
+	border-radius: 3px 3px 3px 3px;
+}
+.comment-thread .comment-avatar img
+{
+	display: inline;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	width: 32px;
+	height: 32px;
+	border-radius: 3px 3px 3px 3px;
+}
+
+div.comment-timestamp
+{
+	display: block;
+	font-weight: bold;
+	color: #252;
+}
+
+.comment-title
+{
+	display: none;
+	display: inline;
+	font-weight: bold;
+	padding-left: 1em;
+	font-style: italic;
+	color: #822;
+}
+.comment-author
+{
+	display: inline;
+	font-weight: bold;
+	color: blue;
+}
+
+/* Theme styles */
+
+ul.comment-thread li.comment div.comment-head
+{
+	background: #ddf;
+	border-bottom: 1pt solid #ccf;
+}
+
+.comment-message
+{
+	padding: 2ex;
+	background-color: #cc9;
+}
+
+.comment-text
+{
+	border-left: #aaa 2pt solid;
+}
+
+
+

@@ -37,17 +37,17 @@
   <link rel="apple-touch-icon" href="{{ media_url('/apple-touch-icon.png') }}">
   {% endblock favicons %}
 
-  {% block css %}
+{%- block css %}
   <link rel="stylesheet" href="{{ media_url('css/site.css') }}">
   <link rel="stylesheet" href="{{ media_url('css/syntax.css') }}">
-  {% endblock css %}
+{% endblock css %}
 
-  {% block headjs %}
+{% block headjs %}
   <!-- All JavaScript at the bottom, except for Modernizr which
         enables HTML5 elements & feature detects -->
     <script src="{{ media_url('js/libs/modernizr-1.7.min.js') }}"></script>
-  {% endblock headjs %}
-  {% block endhead %}{% endblock endhead %}
+{% endblock headjs %}
+{% block endhead %}{% endblock endhead %}
 </head>
 <body id="{{ resource.meta.id if resource.meta.id else resource.slug }}">
   {% block content %}

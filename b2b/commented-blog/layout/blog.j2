@@ -31,4 +31,10 @@
 
 </article>
 
-{% endblock %}
+{% endblock main %}
+
+{% block css %}
+{{ super() }}
+  <link rel="stylesheet" href="{{ media_url('css/comments.css') }}">
+{% endblock css %}
+
