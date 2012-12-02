@@ -38,9 +38,45 @@ Documentation
 Currently, the behaviour of the extension is not yet well-defined.
 Please, meanwhile rely on the examples which are pretty explanatory and on (glups!) the code.
 
+Status
+------
+
+What works:
+
+- Generation of content from comment files
+	- Takes comment files (.comment) with metadata for each comment in content folders.
+	- Comment count as post metadata 'ncomments'
+	- Comments as post metadata 'comments'
+	- Nested comments based on 'inreplyto' metadata.
+	- Author avatars
+		- Gravatar based on 'authoremail'
+		- Explicit avatar from 'image' or 'avataruri'
+	- Stylable classes
+	- Disabling or enabling comments via meta.comment = True/False
+
+What is to be implemented:
+
+- Static generation (pending matter):
+	- Configurable default gravatar mode
+	- Comments disabled but still visible existing ones.
+	- Configurable message for unable to send more messages
+- Comment submission form
+	- Submission form with hidden inreplyto and thread
+	- Server script (php?) to build the comment file and submit it by email
+- Spam tools
+	- Moderation by accepting a checksum
+	- Pre-moderation with akismet
+- Unassisted automatic generation
+- On browser rendering
+	- Generation of json data for comments
+	- Dynamically building comments with javascript
+	- Combine it with existing comments
+	- JSON data tolerance (don't destroy existing comments when JSON data is missing)
+
+Want to help? [Fork it in GitHub][GitHupHydeComments].
+
 Design forces
 -------------
-
 
 ### Comment rendering
 
@@ -90,7 +126,7 @@ Each can be convenient for some users.
 [JeckyllStaticCommentsPost]: http://hezmatt.org/~mpalmer/blog/2011/07/19/static-comments-in-jekyll.html
 [Jeckyll]: http://jekyllrb.com/
 [JSON]: http://json.org
-
+[GitHupHydeComments]: https://github.com/vokimon/hyde-comments
 
 
 
