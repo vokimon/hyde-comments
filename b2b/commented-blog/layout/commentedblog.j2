@@ -1,4 +1,4 @@
-{# -*- html -*- #}
+{% extends "blog.j2" %}
 
 {%- macro renderThread(comments) %}
 {% if comments %}
@@ -26,6 +26,7 @@
 {% endif %}
 {% endmacro %}
 
+{% block comments %}
 {%- if resource.meta.comments %}{# comments enabled in metadata? #}
 
 <h2>Comments</h2>
@@ -33,3 +34,10 @@
 
 {{ renderThread(resource.comments) }}
 {%- endif %}
+{% endblock comments %}
+
+{% block css %}
+{{ super() }}
+  <link rel="stylesheet" href="{{ media_url('css/comments.css') }}">
+{% endblock css %}
+

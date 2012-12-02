@@ -1,4 +1,4 @@
-extends: blog.j2
+extends: commentedblog.j2
 default_block: post
 listable: true
 comments: True
