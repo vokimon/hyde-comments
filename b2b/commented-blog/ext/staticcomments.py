@@ -21,16 +21,16 @@ stored as independent source files for each comment.
 # - nested comments
 # - ncomments in nested comments
 # - meta.comments = True enables them
+# - avatar when
+#   - valid email
+#   - invalid email
+#   - explicit image provided
+#   - changing default via meta
 
-
-def metaData(r, *args) :
-	for attribute in args :
-		try: return r.meta.to_dict()[attribute]
-		except KeyError, e :
-			if e.args[0] != attribute : raise
-	raise AttributeError(
-		"Comment %s should define any metadata attributes of %s"%(
-			r, ", ".join(args)))
+# TODO:
+# - Sorting comments by date
+# - Threads
+# - Counting despite the threads
 
 
 class CommentsPlugin(Plugin) :
@@ -42,6 +42,15 @@ class CommentsPlugin(Plugin) :
 
 	def begin_site(self) :
 
+		def metaData(r, *args) :
+			for attribute in args :
+				try: return r.meta.to_dict()[attribute]
+				except KeyError, e :
+					if e.args[0] != attribute : raise
+			raise AttributeError(
+				"Comment %s should define any metadata attributes of %s"%(
+					r, ", ".join(args)))
+
 		def contentWithoutMeta(r) :
 			text = r.source_file.read_all()
 			match = re.match(self._stripMetaRE, text)
@@ -49,6 +58,10 @@ class CommentsPlugin(Plugin) :
 
 		def appendComment(c) :
 			thread = metaData(c, "thread", "inreplyto")
+			c.meta.thread = thread
+			inreplyto = metaData(c, "inreplyto", "thread")
+			c.meta.inreplyto = inreplyto
+
 			if thread not in comments : comments[thread] = []
 			comments[thread].append(c)
 
@@ -82,16 +95,33 @@ class CommentsPlugin(Plugin) :
 			r.is_processable = False
 			r.meta.listable=False
 			r.uses_template=False
+			r.thread_children = []
+			r.thread_parent = None
 			r.text = contentWithoutMeta(r)
 			r.meta.avataruri = commentAvatar(r)
 			appendComment(r)
+		for thread in comments.values() :
+			thread.sort(key=lambda x : x.meta.published)
+			def debug(*args): print args; return args
+			id_to_comment = dict(( (c.meta.id, c) for c in thread ))
+			for comment in thread :
+				if comment.meta.inreplyto in id_to_comment :
+					print "Children found", comment.meta.id, "of", comment.meta.inreplyto
+					parent = id_to_comment[comment.meta.inreplyto]
+					parent.thread_children.append(comment)
+					thread.remove(comment)
+					
 		self.site.comments = comments
 
+
 	def begin_text_resource(self, resource, text) :
+		def recursiveCount(comments) :
+			return sum((recursiveCount(c.thread_children) for c in comments), len(comments))
 		if resource.source_file.kind == 'comment': return
-		if 'id' not in resource.meta.to_dict() : return
+		if 'id' not in resource.meta.to_dict() :
+			resource.meta.id = resource.slug
 		comments = self.site.comments.get(resource.meta.id,[])
-		resource.ncomments = len(comments)
+		resource.ncomments = recursiveCount(comments)
 		resource.comments = comments
 
 

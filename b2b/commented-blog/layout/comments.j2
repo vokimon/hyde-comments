@@ -1,11 +1,6 @@
 {# -*- html -*- #}
 
-{%- if resource.meta.comments %}{# comments enabled in metadata? #}
-
-<h2>Comments</h2>
-<h3>{{ resource.ncomments }} comments.</h3>
-
-{% set comments = resource.comments %}
+{%- macro renderThread(comments) %}
 {% if comments %}
 <ul class='comment-thread'>
 {% for comment in comments | sort(attribute='meta.published') %}
@@ -24,8 +19,17 @@
 	<div class='comment-text'>
 	{{ comment.text | markdown }}
 	</div>
+{{- renderThread(comment.thread_children) }}
 	</li>
 {% endfor%}
 </ul>
 {% endif %}
-{% endif %}
+{% endmacro %}
+
+{%- if resource.meta.comments %}{# comments enabled in metadata? #}
+
+<h2>Comments</h2>
+<h3>{{ resource.ncomments }} comments.</h3>
+
+{{ renderThread(resource.comments) }}
+{%- endif %}
