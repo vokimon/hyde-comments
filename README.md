@@ -48,27 +48,29 @@ What works:
 	- Comment count as post metadata 'ncomments'
 	- Comments as post metadata 'comments'
 	- Nested comments based on 'inreplyto' metadata.
-	- Author avatars
-		- Gravatar based on 'authoremail'
-		- Explicit avatar from 'image' or 'avataruri'
-	- Stylable classes
-	- Disabling or enabling comments via meta.comment = True/False
+- Author avatars
+	- Gravatar based on 'authoremail'
+	- Explicit avatar from 'image' or 'avataruri'
+- Stylable classes
+- Disabling or enabling comments via meta.comment = True/False
 
 What is to be implemented:
 
 - Static generation (pending matter):
+	- Generate dependencies on comments
 	- Configurable default gravatar mode
-	- Comments disabled but still visible existing ones.
 	- Configurable message for unable to send more messages
 - Comment submission form
 	- Submission form with hidden inreplyto and thread
 	- Server script (php?) to build the comment file and submit it by email
+	- Closing comments (visible but no further submissions accepted)
 - Spam tools
 	- Moderation by accepting a checksum
 	- Pre-moderation with akismet
 - Unassisted automatic generation
 - On browser rendering
 	- Generation of json data for comments
+	- Regeneration of comment index json files when moderated
 	- Dynamically building comments with javascript
 	- Combine it with existing comments
 	- JSON data tolerance (don't destroy existing comments when JSON data is missing)
