@@ -83,15 +83,9 @@ ul.comment-thread li.comment div.comment-head
 	border-left: #aaa 2pt solid;
 }
 
-.comment-form-submit
-{
-}
 .comment-form-content
 {
 	float: left;
-}
-.comment-form-identify
-{
 }
 
 .comment-form .comment-form-text textarea
@@ -99,25 +93,35 @@ ul.comment-thread li.comment div.comment-head
 	width: 100%
 }
 
-.comment-form textarea,
+.comment-form .comment-form-contentrea,
+.comment-form .comment-form-title,
+.comment-form .comment-form-name,
+.comment-form .comment-form-email,
+.comment-form .comment-form-website
+{
+	padding-bottom: 5px;
+	margin: 3px;
+}
+.comment-form .comment-form-content textarea,
 .comment-form .comment-form-title input,
 .comment-form .comment-form-name input,
 .comment-form .comment-form-email input,
 .comment-form .comment-form-website input
 {
 	max-width: 95%;
-	margin: 2px;
+	padding: 0px;
+	margin: 0pt;
 }
 .clear
 {
 	clear: both;
 }
-
 .comment-form
 {
 	margin-bottom: 2ex;
-	padding-left: 72px;
+	padding-left: 36px;
 }
+
 @media screen and (max-width: 1024px)
 {
 	.comment-form
@@ -132,4 +136,30 @@ ul.comment-thread li.comment div.comment-head
 }
 
 
+.comment-form input[type=submit]
+{
+	background-color: #45a;
+	color: white;
+	font-weight: bold;
+	padding: 4pt;
+	-webkit-border-radius: .5em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+
+.comment-form input[type=submit]:focus
+{
+	background-color: #66a;
+	-webkit-box-shadow: 0 1px 2px rgba(1,0,0,.2);
+	-moz-box-shadow: 0 1px 2px rgba(1,0,0,.2);
+	box-shadow: 0 1px 2px rgba(1,0,0,.2);
+}
+
+.comment-form input[type=submit]:hover
+{
+	background-color: #54a;
+}
 
