@@ -7,8 +7,10 @@ published: !!timestamp '2012-12-01 01:00:00'
 updated: !!timestamp '2012-12-01 01:00:00'
 author: First Commenter
 authoruri: http://knowyourmeme.com/memes/first
-authoremail: http://knowyourmeme.com/memes/first
+authoremail: nobody@example.com
 ---
 
 First!!
+
+An email was provided but no gravatar
 

@@ -1,5 +1,7 @@
 from hyde.plugin import Plugin
 import re
+import hashlib
+import urllib
 
 
 """
@@ -38,17 +40,39 @@ class CommentsPlugin(Plugin) :
 			r"^\s*(?:---|===)\s*\n((?:.|\n)+?)\n\s*(?:---|===)\s*\n*",
 			re.MULTILINE)
 
-	def _contentWithoutMeta(self, r) :
-		text = r.source_file.read_all()
-		match = re.match(self._stripMetaRE, text)
-		return text[match.end():]
-
 	def begin_site(self) :
-		comments = {}
+
+		def contentWithoutMeta(r) :
+			text = r.source_file.read_all()
+			match = re.match(self._stripMetaRE, text)
+			return text[match.end():]
+
 		def appendComment(c) :
 			thread = metaData(c, "thread", "inreplyto")
 			if thread not in comments : comments[thread] = []
 			comments[thread].append(c)
+
+		def commentAvatar(c) :
+			if hasattr(c.meta, 'avataruri') and c.meta.avataruri :
+				return c.meta.avataruri
+			if hasattr(c.meta, 'image') and c.meta.image :
+				return c.meta.avataruri
+			gravatar_default = c.node.meta.gravatar_default if 'gravatar_default' in c.node.meta else 'mm'
+			return gravatarFromEmail(c.meta.authoremail, gravatar_default) or None
+
+		def gravatarFromEmail(email, default='mm', size=32) :
+			"""Given an email address composes the gravatar image uri.
+			default says which strategy use when not found.
+			https://en.gravatar.com/site/implement/images/
+			"""
+			md5 = hashlib.md5(email.lower().encode("utf-8")).hexdigest()
+			return ( "http://www.gravatar.com/avatar/" + md5 + "?"
+				+ urllib.urlencode({
+					'd':default,
+					's':str(32)
+					}))
+
+		comments = {}
 		for r in self.site.content.walk_resources() :
 			if r.source_file.kind != 'comment' : continue
 			if r.meta.id in comments :
@@ -58,7 +82,8 @@ class CommentsPlugin(Plugin) :
 			r.is_processable = False
 			r.meta.listable=False
 			r.uses_template=False
-			r.text = self._contentWithoutMeta(r)
+			r.text = contentWithoutMeta(r)
+			r.meta.avataruri = commentAvatar(r)
 			appendComment(r)
 		self.site.comments = comments
 
