@@ -80,6 +80,66 @@
 <h3>0 comments.</h3>
 
 
+
+<h3>Leave a comment</h3>
+<div class='comment-form'>
+<form id="commentform" method="POST" action="/commentsubmit.php">
+<input type="hidden" name="thread" value="2012-12-02-my-second-post" />
+<input type="hidden" name="inreplyto" value="2012-12-02-my-second-post" />
+<input type="hidden" name="return_url" value="/blog/2012-12-02-my-second-post.html" />
+<div class='comment-form-content'>
+<div class='comment-form-title'>
+	<input
+		type="text"
+		placeholder='A subject'
+		size="25"
+		name="title"
+		/>
+	<label for='title'>Subject</label>&nbsp;(optional)
+</div>
+<div class='comment-form-text'>
+<textarea
+	name="comment"
+	placeholder='Leave a comment...'
+	rows="6" cols="60"
+	required='yes'
+	>
+</textarea>
+</div>
+</div>
+<div class='comment-form-identify'>
+<div class='comment-form-name'>
+	<input
+		type="text"
+		placeholder='Your name'
+		size="25"
+		required="yes"
+		name="name"
+		/>
+	<label for='name'>Name</label>
+</div>
+<div class='comment-form-email'>
+	<input
+		type="email"
+		placeholder='your.name@yourdomain.com'
+		size="25"
+		name="email"
+		required="yes"
+		/>
+	<label for='email'>E-mail</label>&nbsp;(not&nbsp;published)
+</div>
+<div class='comment-form-website'>
+	<input type="url" placeholder='http://yourdomain.com' size="25" name="link" />
+	<label for='website''>Website</label>&nbsp;(optional)
+</div>
+<div class='comment-form-submit'>
+	<input type="submit" name="submit" value="Submit Comment" />
+</div>
+</div>
+</form>
+<div class='clear'></div>
+</div>
+
 </article>
 
           </section>

@@ -1,5 +1,10 @@
 {% extends "blog.j2" %}
 
+{% block css %}
+{{ super() }}
+  <link rel="stylesheet" href="{{ media_url('css/comments.css') }}">
+{% endblock css %}
+
 {%- macro renderThread(comments) %}
 {% if comments %}
 <ul class='comment-thread'>
@@ -33,11 +38,66 @@
 <h3>{{ resource.ncomments }} comments.</h3>
 
 {{ renderThread(resource.comments) }}
-{%- endif %}
-{% endblock comments %}
 
-{% block css %}
-{{ super() }}
-  <link rel="stylesheet" href="{{ media_url('css/comments.css') }}">
-{% endblock css %}
+<h3>Leave a comment</h3>
+<div class='comment-form'>
+<form id="commentform" method="POST" action="{{ site.comment_handler_uri|default("/commentsubmit.php") }}">
+<input type="hidden" name="thread" value="{{resource.meta.id}}" />
+<input type="hidden" name="inreplyto" value="{{resource.meta.id}}" />
+<input type="hidden" name="return_url" value="{{ site.full_url(resource.get_relative_deploy_path()) }}" />
+<div class='comment-form-content'>
+<div class='comment-form-title'>
+	<input
+		type="text"
+		placeholder='A subject'
+		size="25"
+		name="title"
+		/>
+	<label for='title'>Subject</label>&nbsp;(optional)
+</div>
+<div class='comment-form-text'>
+<textarea
+	name="comment"
+	placeholder='Leave a comment...'
+	rows="6" cols="60"
+	required='yes'
+	>
+</textarea>
+</div>
+</div>
+<div class='comment-form-identify'>
+<div class='comment-form-name'>
+	<input
+		type="text"
+		placeholder='Your name'
+		size="25"
+		required="yes"
+		name="name"
+		/>
+	<label for='name'>Name</label>
+</div>
+<div class='comment-form-email'>
+	<input
+		type="email"
+		placeholder='your.name@yourdomain.com'
+		size="25"
+		name="email"
+		required="yes"
+		/>
+	<label for='email'>E-mail</label>&nbsp;(not&nbsp;published)
+</div>
+<div class='comment-form-website'>
+	<input type="url" placeholder='http://yourdomain.com' size="25" name="link" />
+	<label for='website''>Website</label>&nbsp;(optional)
+</div>
+<div class='comment-form-submit'>
+	<input type="submit" name="submit" value="Submit Comment" />
+</div>
+</div>
+</form>
+<div class='clear'></div>
+</div>
+{%- endif %}
+
+{% endblock comments %}
 

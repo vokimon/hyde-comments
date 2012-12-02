@@ -25,7 +25,7 @@ adding an static javascript code to your template.
 
 So, why that approach is not enough?
 You should read the following [post][JeckyllStaticCommentsPost] by Matt Palmer
-the author of an equivalent extension for [Jeckyll] (Ruby based alter ego of Hyde).
+the author of an equivalent extension for [Jeckyll][Jeckyll] (Ruby based alter ego of Hyde).
 
 In summary:
 

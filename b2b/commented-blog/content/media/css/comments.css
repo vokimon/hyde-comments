@@ -83,5 +83,53 @@ ul.comment-thread li.comment div.comment-head
 	border-left: #aaa 2pt solid;
 }
 
+.comment-form-submit
+{
+}
+.comment-form-content
+{
+	float: left;
+}
+.comment-form-identify
+{
+}
+
+.comment-form .comment-form-text textarea
+{
+	width: 100%
+}
+
+.comment-form textarea,
+.comment-form .comment-form-title input,
+.comment-form .comment-form-name input,
+.comment-form .comment-form-email input,
+.comment-form .comment-form-website input
+{
+	max-width: 95%;
+	margin: 2px;
+}
+.clear
+{
+	clear: both;
+}
+
+.comment-form
+{
+	margin-bottom: 2ex;
+	padding-left: 72px;
+}
+@media screen and (max-width: 1024px)
+{
+	.comment-form
+	{
+		padding-left: inherit;
+	}
+	ul.comment-thread
+	{
+		padding-left: 10px;
+	}
+
+}
+
 
 
