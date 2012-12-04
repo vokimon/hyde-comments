@@ -43,41 +43,52 @@ Status
 
 What works:
 
-- Generation of content from comment files
-	- Takes comment files (.comment) with metadata for each comment in content folders.
-	- Comment count as post metadata 'ncomments'
-	- Comments as post metadata 'comments'
-	- Nested comments based on 'inreplyto' metadata.
+- Posts include comments information provided as separate comment files
+	- Comment files (.comment) can be placed anywhere in the content folder.
+	- They are related to their post assigning 'comment.meta.thread' to 'post.meta.id'
+	- Templates can acces the list of post comments by accessing 'post.comments'
+- Nested comments:
+	- Comments are nested assigning 'child.meta.inreplyto' to 'parent.meta.id'
+	- Top level comments just set 'child.meta.inreplyto' to the post id.
+	- Children comments are available as 'parent.meta.children'
+- Comment template with stylable classes
+- Disabling or enabling comments in a post via meta.comment = True/False
 - Author avatars
-	- Gravatar based on 'authoremail'
-	- Explicit avatar from 'image' or 'avataruri'
-- Stylable classes
-- Disabling or enabling comments via meta.comment = True/False
+	- Gravatar based on 'authoremail' if available.
+	- Configurable [fallback gravatar](http://en.gravatar.com/site/implement/images/)
+	- Explicit avatar from either 'image' or 'avataruri' metas.
+- Comment submission form (a web 1.0 one :-( )
+- Comment submission backend in php, that sends the comment file back to the author.
+	- The author has to save it and regenerate the web site.
+	- You can place the backend in a different hosting if you want. Just change the submission URI in 'meta.comment_handler_uri':.
+	- Light-coupled: It is easily reimplementable in whatever language/framework your hosting allows.
+	- If you want to automate more things, like regeneration or comment storage, all futs under the same API.
+
 
 What is to be implemented:
 
-- Static generation (pending matter):
-	- Generate dependencies on comments
-	- Configurable default gravatar mode
-	- Configurable message for unable to send more messages
+- Make the post depend on its comments to force regeneration.
+- AJAX based comment submission form
+- Reply on a given comment (submit different 'thread' and 'inreplyto')
+- Do not generate link if no author website is provided.
+- Adding optional avatar field (upload or uri?)
+- Disabling comments submission via 'meta.commentsclosed' = True
 - Security concerns on comment content
 	- Strip html tags
 	- Spam links
 	- Email addresses
-- Comment submission form
-	- Submission form with hidden inreplyto and thread
-	- Server script (php?) to build the comment file and submit it by email
-	- Closing comments (visible but no further submissions accepted)
 - Spam tools
 	- Moderation by accepting a checksum
 	- Pre-moderation with akismet
 - Unassisted automatic generation
-- On browser rendering
+- Client side rendering
 	- Generation of json data for comments
 	- Regeneration of comment index json files when moderated
 	- Dynamically building comments with javascript
 	- Combine it with existing comments
 	- JSON data tolerance (don't destroy existing comments when JSON data is missing)
+- Pingback
+- Likes
 
 Want to help? [Fork it in GitHub][GitHupHydeComments].
 
@@ -115,15 +126,31 @@ and users can see the comments without waiting for the site to be regenerated.
 
 ### Comment submission
 
-This is the part of the web that requires to be dynamic.
-Thus, it should be an small lightweight script if we want to keep in the static generation category.
+This part of the comment system requires server side scripting at least to receive the comments.
+But the use of static web generators is often motivated by reasons such as:
 
-To my understanding, there are three levels of things that can be done.
-Each can be convenient for some users.
+* Reducing the server load.
+* Being able to place the web whatever the languages provided by a given hosting.
 
-1. **Sending an email with the comment file to the author** so that he can moderate it, save it and regenerate the site.
-2. **Storing the comment file and noticing the author**.
-3. **Storing the comment file, regenerating the site and warn the author**.
+The first motivation discourages the use of heavy duty server scripts.
+The second one discourages from attaching the user to a given language and framework setup.
+
+Nevertheless many users that are happy with that if some tasks are being conveniently automated.
+
+We are not that constrained if we realize that:
+
+- Adding a comment is an infrequent task compared to page views, so the load is less than the one of a dynamic website if you want to compare with that.
+- We can place the submission script in a different host than the static website. Hosting restrictions and load can be reduced that way.
+- If they are simple enough, we can provide, with the same API, different back-ends that do different things using different technologies.
+
+So what kind of things could do a back-end:
+
+- Sending an attached comment file by mail to the author so that she can store it and regenerate the website by hand.
+- Storing the comment on the site and notifying the author so that she can regenerate the blog.
+- Storing and regenerating the blog (convenient but dangerous)
+- Validating the author email (sending an email to the author so she can confirm the comment via a confirmation url)
+- Filtering for spam with Akismet or similar
+- Log-in, account management...
 
 
 
