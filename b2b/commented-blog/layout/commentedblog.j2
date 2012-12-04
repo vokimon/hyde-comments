@@ -41,7 +41,7 @@
 
 <h3>Leave a comment</h3>
 <div class='comment-form'>
-<form id="commentform" method="POST" action="{{ resource.meta.comment_handler_uri|default("/commentsubmit.php") }}">
+<form id="commentform" method="POST" accept-charset='utf-8' action="{{ resource.meta.comment_handler_uri|default("/commentsubmit.php") }}">
 <input type="hidden" name="thread" value="{{resource.meta.id}}" />
 <input type="hidden" name="inreplyto" value="{{resource.meta.id}}" />
 <input type="hidden" name="return_url" value="{{ site.full_url(resource.get_relative_deploy_path()) }}" />
