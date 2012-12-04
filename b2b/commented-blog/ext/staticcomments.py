@@ -88,6 +88,9 @@ class CommentsPlugin(Plugin) :
 		comments = {}
 		for r in self.site.content.walk_resources() :
 			if r.source_file.kind != 'comment' : continue
+			if 'id' not in r.meta.to_dict() :
+				self.logger.debug("Not id for %s"%r)
+				continue
 			if r.meta.id in comments :
 				raise ValueError(
 					"Repeated comment id '%s' in comments %s and %s" %(
