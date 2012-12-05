@@ -26,8 +26,6 @@ stored as independent source files for each comment.
 #   - invalid email
 #   - explicit image provided
 #   - changing default via meta
-
-# TODO:
 # - Sorting comments by date
 # - Threads
 # - Counting despite the threads
@@ -42,28 +40,10 @@ class CommentsPlugin(Plugin) :
 
 	def begin_site(self) :
 
-		def metaData(r, *args) :
-			for attribute in args :
-				try: return r.meta.to_dict()[attribute]
-				except KeyError, e :
-					if e.args[0] != attribute : raise
-			raise AttributeError(
-				"Comment %s should define any metadata attributes of %s"%(
-					r, ", ".join(args)))
-
 		def contentWithoutMeta(r) :
 			text = r.source_file.read_all()
 			match = re.match(self._stripMetaRE, text)
 			return text[match.end():]
-
-		def appendComment(c) :
-			thread = metaData(c, "thread", "inreplyto")
-			c.meta.thread = thread
-			inreplyto = metaData(c, "inreplyto", "thread")
-			c.meta.inreplyto = inreplyto
-
-			if thread not in comments : comments[thread] = []
-			comments[thread].append(c)
 
 		def commentAvatar(c) :
 			if hasattr(c.meta, 'avataruri') and c.meta.avataruri :
@@ -85,50 +65,78 @@ class CommentsPlugin(Plugin) :
 					's':str(32)
 					}))
 
+		# compile dicts of posts and comments by id
 		comments = {}
+		posts = {}
 		for r in self.site.content.walk_resources() :
-			if r.source_file.kind != 'comment' : continue
-			if 'id' not in r.meta.to_dict() :
-				self.logger.debug("Not id for %s"%r)
-				continue
-			if r.meta.id in comments :
+			if r.source_file.kind == 'comment' :
+				if 'id' not in r.meta.to_dict() :
+					self.logger.debug("Not id for comment %s"%r)
+				id = str(r.meta.id)
+				if id in comments :
+					raise ValueError(
+						"Repeated comment id '%s' in comments %s and %s" %(
+							id, r, comments[id]))
+				comments[id] = r
+			else :
+				if 'id' not in r.meta.to_dict() : continue
+				id = str(r.meta.id)
+				if id in posts :
+					raise ValueError(
+						"Repeated post id '%s' in comments %s and %s" %(
+							id, r, posts[id]))
+				posts[id] = r
+
+		# Initialize comment related fields on posts
+		for post in posts.values() :
+			post.ncomments = 0
+			post.comments = []
+
+		# Setting computed fields on comments
+		for comment in comments.values() :
+			comment.thread_children = []
+			comment.is_processable = False
+			comment.meta.listable=False
+			comment.uses_template=False
+			comment.text = contentWithoutMeta(comment)
+			comment.meta.avataruri = commentAvatar(comment)
+
+		def connectComment(comment, inreplyto) :
+			self.logger.debug("Comment found: %s replying %s"%(r,inreplyto))
+			if inreplyto in comments :
+				comments[inreplyto].thread_children.append(comment)
+			elif inreplyto in posts :
+				posts[inreplyto].comments.append(comment)
+			else:
 				raise ValueError(
-					"Repeated comment id '%s' in comments %s and %s" %(
-						r.meta.id, r, comments[r.meta.id],))
-			r.is_processable = False
-			r.meta.listable=False
-			r.uses_template=False
-			r.thread_children = []
-			r.thread_parent = None
-			r.text = contentWithoutMeta(r)
-			r.meta.avataruri = commentAvatar(r)
-			appendComment(r)
-			self.logger.debug("Comment found: %s of thread %s, replying %s"%(r.slug,r.meta.thread,r.meta.inreplyto))
-		for thread in comments.values() :
-			thread.sort(key=lambda x : x.meta.published)
-			def debug(*args): print args; return args
-			id_to_comment = dict(( (c.meta.id, c) for c in thread ))
-			for comment in thread :
-				if comment.meta.inreplyto in id_to_comment :
-					self.logger.debug("Children found: %s of %s"%(comment.meta.id, comment.meta.inreplyto))
-					parent = id_to_comment[comment.meta.inreplyto]
-					parent.thread_children.append(comment)
-					thread.remove(comment)
-					
-		self.site.comments = comments
+					"Comment %s refering to an invalid resource '%s'" %(
+						r, inreplyto))
 
+		# Build the thread tree
+		for comment in comments.values() :
+			if 'inreplyto' in comment.meta.to_dict() :
+				inreplyto = str(comment.meta.inreplyto)
+				connectComment(comment, inreplyto)
+			elif 'thread' in comment.meta.to_dict() :
+				thread = str(comment.meta.thread)
+				connectComment(comment, thread)
+				comment.meta.inreplyto = thread
+			else :
+				raise ValueError(
+					"Comment %s is missing either a 'thread' or 'inreplyto' meta attribute to be related"%(
+						comment))
 
-	def begin_text_resource(self, resource, text) :
+		# Sort by date and count comments
+		def recursiveSort(comments) :
+			for comment in comments :
+				recursiveSort(comment.thread_children)
+				comments.sort(key=lambda x : x.meta.published)
 		def recursiveCount(comments) :
 			return sum((recursiveCount(c.thread_children) for c in comments), len(comments))
-		if resource.source_file.kind == 'comment': return
-		if 'id' not in resource.meta.to_dict() :
-			resource.ncomments = 0
-			resource.comments = []
-			return
-		comments = self.site.comments.get(resource.meta.id,[])
-		resource.ncomments = recursiveCount(comments)
-		resource.comments = comments
+		for post in posts.values() :
+			recursiveSort(post.comments)
+			post.ncomments = recursiveCount(post.comments)
+
 
 
 
