@@ -1,0 +1,15 @@
+---
+id: multiple-comments-000004
+thread: multiple-comments
+inreplyto: multiple-comments
+title: Comment with image
+published: !!timestamp '2012-12-01 03:00:00'
+updated: !!timestamp '2012-12-01 03:00:00'
+author: Fourth Commenter
+authoruri:
+authoremail: bad@email
+image: http://upload.wikimedia.org/wikipedia/commons/b/b1/Maria_Amalia.jpg
+---
+
+image provided with image meta
+

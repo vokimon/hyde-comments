@@ -69,7 +69,7 @@ class CommentsPlugin(Plugin) :
 			if hasattr(c.meta, 'avataruri') and c.meta.avataruri :
 				return c.meta.avataruri
 			if hasattr(c.meta, 'image') and c.meta.image :
-				return c.meta.avataruri
+				return c.meta.image
 			gravatar_default = c.node.meta.gravatar_default if 'gravatar_default' in c.node.meta else 'mm'
 			return gravatarFromEmail(c.meta.authoremail, gravatar_default) or None
 
