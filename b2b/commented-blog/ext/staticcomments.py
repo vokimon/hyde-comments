@@ -133,10 +133,22 @@ class CommentsPlugin(Plugin) :
 				comments.sort(key=lambda x : x.meta.published)
 		def recursiveCount(comments) :
 			return sum((recursiveCount(c.thread_children) for c in comments), len(comments))
+
+		def recursiveDepend(post, comments) :
+			post.depends.extend( (
+				comment.relative_path
+				for comment in comments
+				if comment.relative_path not in post.depends
+				))
+			for comment in comments :
+				recursiveDepend(post, comment.thread_children)
+
 		for post in posts.values() :
 			recursiveSort(post.comments)
 			post.ncomments = recursiveCount(post.comments)
-
+			if not hasattr(post, 'depends'):
+				post.depends = []
+			recursiveDepend(post, post.comments)
 
 
 

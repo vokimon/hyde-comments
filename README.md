@@ -63,14 +63,14 @@ What works:
 	- You can place the backend in a different hosting if you want. Just change the submission URI in 'meta.comment_handler_uri':.
 	- Light-coupled: It is easily reimplementable in whatever language/framework your hosting allows.
 	- If you want to automate more things, like regeneration or comment storage, all futs under the same API.
+- Post generation depends on its comments.
+- Fixed: Links are not generated when no author website is provided.
 
 
-What is to be implemented:
+What is to be implemented (TO-DO's):
 
-- Make the post depend on its comments to force regeneration.
 - AJAX based comment submission form
-- Reply on a given comment (submit different 'thread' and 'inreplyto')
-- Do not generate link if no author website is provided.
+- Generation can be threaded but there is no means yet to submit threaded comments by replying a given comment
 - Adding optional avatar field (upload or uri?)
 - Disabling comments submission via 'meta.commentsclosed' = True
 - Security concerns on comment content
