@@ -5,7 +5,7 @@ inreplyto: threaded-comments-000001
 title: First threaded comment
 published: !!timestamp '2012-12-01 01:00:00'
 updated: !!timestamp '2012-12-01 01:00:00'
-author: First Commenter
+author: Child comment
 authoruri: http://knowyourmeme.com/memes/first
 authoremail: nobody@example.com
 ---

@@ -1,0 +1,15 @@
+---
+id: threaded-comments-000003
+inreplyto: threaded-comments-000002
+title: First threaded comment
+published: !!timestamp '2012-12-01 01:00:00'
+updated: !!timestamp '2012-12-01 01:00:00'
+author: Child comment with no thread but implicit by inreplyto
+authoruri: http://knowyourmeme.com/memes/first
+authoremail: nobody@example.com
+---
+
+This comment do not specify the post but 
+it can be implicit by the replied comment
+
+
