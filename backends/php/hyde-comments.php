@@ -4,9 +4,19 @@ $from_address = "webmaster@noreply.net";
 $to_address = "yourmail@yourdomain.net";
 $subject = "[Hyde comments] New comment received";
 
-$debug or ini_set('display_errors', 'On');
-$debug or error_reporting(E_ALL | E_STRICT);
+$debug and ini_set('display_errors', 'On');
+$debug and error_reporting(E_ALL | E_STRICT);
 
+function badRequest($message = "Error 400: Bad Request")
+{
+	header("HTTP/1.1 400 Bad Request");
+	echo $message;
+	exit();
+}
+
+
+
+if (! isset($_SERVER['HTTP_REFERER'])) badRequest();
 $referrer = $_SERVER['HTTP_REFERER'];
 
 if ($debug)
@@ -65,8 +75,7 @@ try
 }
 catch (MissingField $e)
 {
-	echo $e->getMessage();
-	return;
+	badRequest($e->getMessage());
 }
 $short_hash = substr($random_hash,-6);
 $id = sluggify("$thread-$slug_time-$short_hash-$title");
