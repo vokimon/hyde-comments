@@ -11,6 +11,7 @@
 {% for comment in comments | sort(attribute='meta.published') %}
 	<li class='comment'>
 	<div class='comment-head'>
+	{% if comment.meta.authoruri %}
 	<a class='comment-avatar' target='_'
 		href='{{comment.meta.authoruri|default("#")}}'>
 		<img style='max-height:32px;max-width:32px;' src='{{comment.meta.avataruri}}' /></a>
@@ -18,6 +19,10 @@
 		href='{{comment.meta.authoruri}}'>{{
 			comment.meta.author
 			}}</a>
+	{% else %}
+	<span class='comment-avatar'><img style='max-height:32px;max-width:32px;' src='{{comment.meta.avataruri}}' /></span>
+	<span class='comment-author'>{{ comment.meta.author }}</span>
+	{% endif %}
 	<div class='comment-title'>{{comment.meta.title}}</div>
 	<div class='comment-timestamp'>{{comment.meta.published}}</div>
 	</div>
