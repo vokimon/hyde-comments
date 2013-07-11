@@ -33,7 +33,7 @@ class MissingField extends Exception
 	}
 };
 
-/// Safely retrievs post data or throws unless a default value is provided
+/// Safely retrieves post data or throws unless a default value is provided
 function post($field, $default=Null)
 {
 	if (!isset($_POST[$field]))
