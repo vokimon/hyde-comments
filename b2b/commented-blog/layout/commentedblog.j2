@@ -9,12 +9,14 @@
 {% if comments %}
 <ul class='comment-thread'>
 {% for comment in comments | sort(attribute='meta.published') %}
-	<li class='comment'>
+	<li class='comment' id='{{ comment.meta.id }}'>
 	<div class='comment-head'>
 	{% if comment.meta.authoruri %}
 	<a class='comment-avatar' target='_'
 		href='{{comment.meta.authoruri|default("#")}}'>
-		<img style='max-height:32px;max-width:32px;' src='{{comment.meta.avataruri}}' /></a>
+		<img
+			style='max-height:32px;max-width:32px;'
+			src='{{comment.meta.avataruri}}' /></a>
 	<a class='comment-author' target='_'
 		href='{{comment.meta.authoruri}}'>{{
 			comment.meta.author
@@ -24,6 +26,7 @@
 	<span class='comment-author'>{{ comment.meta.author }}</span>
 	{% endif %}
 	<div class='comment-title'>{{comment.meta.title}}</div>
+	<div class='comment-reply'><a href='#commentform' onclick='setCurrentReply("{{comment.meta.id}}", "{{comment.meta.title}}");'>Reply</a></div>
 	<div class='comment-timestamp'>{{comment.meta.published}}</div>
 	</div>
 	<div class='comment-text'>
@@ -40,6 +43,15 @@
 {%- if resource.meta.comments %}{# comments enabled in metadata? #}
 
 <h2>Comments</h2>
+<script>
+<!--
+function setCurrentReply(comment,title)
+{
+	document.getElementById("inreplyto").setAttribute("value",comment);
+	document.getElementById("comment-title").setAttribute("value","Re: "+title);
+}
+-->
+</script>
 <h3>{{ resource.ncomments }} comments.</h3>
 
 {{ renderThread(resource.comments) }}
@@ -48,7 +60,7 @@
 <div class='comment-form'>
 <form id="commentform" method="POST" accept-charset='utf-8' action="{{ resource.meta.comment_handler_uri|default("/commentsubmit.php") }}">
 <input type="hidden" name="thread" value="{{resource.meta.id}}" />
-<input type="hidden" name="inreplyto" value="{{resource.meta.id}}" />
+<input type="hidden" name="inreplyto" value="{{resource.meta.id}}" id='inreplyto' />
 <input type="hidden" name="return_url" value="{{ site.full_url(resource.get_relative_deploy_path()) }}" />
 <div class='comment-form-content'>
 <div class='comment-form-title'>
@@ -57,6 +69,7 @@
 		placeholder='A subject'
 		size="25"
 		name="title"
+		id='comment-title'
 		/>
 	<label for='title'>Subject</label>&nbsp;(optional)
 </div>
@@ -93,7 +106,17 @@
 </div>
 <div class='comment-form-website'>
 	<input type="url" placeholder='http://yourdomain.com' size="25" name="website" />
-	<label for='website''>Website</label>&nbsp;(optional)
+	<label for='website'>Website</label>&nbsp;(optional)
+</div>
+{# Should be display:none so that just bots fill it #}
+<div id='yuemail'>
+	<input
+		type="email"
+		placeholder='your.name@yourdomain.com'
+		size="25"
+		name="yuemail"
+		id='yuemail'
+		/>
 </div>
 <div class='comment-form-submit'>
 	<input type="submit" name="submit" value="Submit Comment" />

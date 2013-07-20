@@ -77,17 +77,29 @@
 
 <p>This post has multiple unthreaded&nbsp;comments.</p>
 <h2>Comments</h2>
+<script>
+<!--
+function setCurrentReply(comment,title)
+{
+	document.getElementById("inreplyto").setAttribute("value",comment);
+	document.getElementById("comment-title").setAttribute("value","Re: "+title);
+}
+-->
+</script>
 <h3>4 comments.</h3>
 
 <ul class='comment-thread'>
-	<li class='comment'>
+	<li class='comment' id='multiple-comments-000001'>
 	<div class='comment-head'>
 		<a class='comment-avatar' target='_'
 		href='http://knowyourmeme.com/memes/first'>
-		<img style='max-height:32px;max-width:32px;' src='http://www.gravatar.com/avatar/8c5548eb0b2b80924f237953392df5e7?s=32&d=mm' /></a>
+		<img
+			style='max-height:32px;max-width:32px;'
+			src='http://www.gravatar.com/avatar/8c5548eb0b2b80924f237953392df5e7?s=32&d=mm' /></a>
 	<a class='comment-author' target='_'
 		href='http://knowyourmeme.com/memes/first'>First Commenter</a>
 		<div class='comment-title'>First comment</div>
+	<div class='comment-reply'><a href='#commentform' onclick='setCurrentReply("multiple-comments-000001", "First comment");'>Reply</a></div>
 	<div class='comment-timestamp'>2012-12-01 01:00:00</div>
 	</div>
 	<div class='comment-text'>
@@ -95,14 +107,17 @@
 <p>An email was provided but no gravatar</p>
 	</div>
 	</li>
-	<li class='comment'>
+	<li class='comment' id='multiple-comments-000002'>
 	<div class='comment-head'>
 		<a class='comment-avatar' target='_'
 		href='http://knowyourmeme.com/memes/second'>
-		<img style='max-height:32px;max-width:32px;' src='http://upload.wikimedia.org/wikipedia/commons/b/b1/Maria_Amalia.jpg' /></a>
+		<img
+			style='max-height:32px;max-width:32px;'
+			src='http://upload.wikimedia.org/wikipedia/commons/b/b1/Maria_Amalia.jpg' /></a>
 	<a class='comment-author' target='_'
 		href='http://knowyourmeme.com/memes/second'>Second Commenter</a>
 		<div class='comment-title'>Second comment</div>
+	<div class='comment-reply'><a href='#commentform' onclick='setCurrentReply("multiple-comments-000002", "Second comment");'>Reply</a></div>
 	<div class='comment-timestamp'>2012-12-01 02:00:00</div>
 	</div>
 	<div class='comment-text'>
@@ -110,14 +125,17 @@
 <p>image provided with avataruri meta</p>
 	</div>
 	</li>
-	<li class='comment'>
+	<li class='comment' id='multiple-comments-000003'>
 	<div class='comment-head'>
 		<a class='comment-avatar' target='_'
 		href='http://www.catb.org/esr/'>
-		<img style='max-height:32px;max-width:32px;' src='http://www.gravatar.com/avatar/131a55e547345f3123af2c4ddd49e6a6?s=32&d=mm' /></a>
+		<img
+			style='max-height:32px;max-width:32px;'
+			src='http://www.gravatar.com/avatar/131a55e547345f3123af2c4ddd49e6a6?s=32&d=mm' /></a>
 	<a class='comment-author' target='_'
 		href='http://www.catb.org/esr/'>Third Commenter</a>
 		<div class='comment-title'>Third comment</div>
+	<div class='comment-reply'><a href='#commentform' onclick='setCurrentReply("multiple-comments-000003", "Third comment");'>Reply</a></div>
 	<div class='comment-timestamp'>2012-12-01 03:00:00</div>
 	</div>
 	<div class='comment-text'>
@@ -125,11 +143,12 @@
 <p>A valid author email was provided</p>
 	</div>
 	</li>
-	<li class='comment'>
+	<li class='comment' id='multiple-comments-000004'>
 	<div class='comment-head'>
 		<span class='comment-avatar'><img style='max-height:32px;max-width:32px;' src='http://upload.wikimedia.org/wikipedia/commons/b/b1/Maria_Amalia.jpg' /></span>
 	<span class='comment-author'>Fourth Commenter</span>
 		<div class='comment-title'>Comment with image</div>
+	<div class='comment-reply'><a href='#commentform' onclick='setCurrentReply("multiple-comments-000004", "Comment with image");'>Reply</a></div>
 	<div class='comment-timestamp'>2012-12-01 03:00:00</div>
 	</div>
 	<div class='comment-text'>
@@ -143,7 +162,7 @@
 <div class='comment-form'>
 <form id="commentform" method="POST" accept-charset='utf-8' action="/commentsubmit.php">
 <input type="hidden" name="thread" value="multiple-comments" />
-<input type="hidden" name="inreplyto" value="multiple-comments" />
+<input type="hidden" name="inreplyto" value="multiple-comments" id='inreplyto' />
 <input type="hidden" name="return_url" value="/blog/2012-12-04-multiple-comments.html" />
 <div class='comment-form-content'>
 <div class='comment-form-title'>
@@ -152,6 +171,7 @@
 		placeholder='A subject'
 		size="25"
 		name="title"
+		id='comment-title'
 		/>
 	<label for='title'>Subject</label>&nbsp;(optional)
 </div>
@@ -188,7 +208,16 @@
 </div>
 <div class='comment-form-website'>
 	<input type="url" placeholder='http://yourdomain.com' size="25" name="website" />
-	<label for='website''>Website</label>&nbsp;(optional)
+	<label for='website'>Website</label>&nbsp;(optional)
+</div>
+<div id='yuemail'>
+	<input
+		type="email"
+		placeholder='your.name@yourdomain.com'
+		size="25"
+		name="yuemail"
+		id='yuemail'
+		/>
 </div>
 <div class='comment-form-submit'>
 	<input type="submit" name="submit" value="Submit Comment" />

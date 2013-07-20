@@ -77,6 +77,15 @@
 
 <p>What&#8217;s&nbsp;up!!!</p>
 <h2>Comments</h2>
+<script>
+<!--
+function setCurrentReply(comment,title)
+{
+	document.getElementById("inreplyto").setAttribute("value",comment);
+	document.getElementById("comment-title").setAttribute("value","Re: "+title);
+}
+-->
+</script>
 <h3>0 comments.</h3>
 
 
@@ -85,7 +94,7 @@
 <div class='comment-form'>
 <form id="commentform" method="POST" accept-charset='utf-8' action="/commentsubmit.php">
 <input type="hidden" name="thread" value="2012-12-02-my-second-post" />
-<input type="hidden" name="inreplyto" value="2012-12-02-my-second-post" />
+<input type="hidden" name="inreplyto" value="2012-12-02-my-second-post" id='inreplyto' />
 <input type="hidden" name="return_url" value="/blog/2012-12-02-my-second-post.html" />
 <div class='comment-form-content'>
 <div class='comment-form-title'>
@@ -94,6 +103,7 @@
 		placeholder='A subject'
 		size="25"
 		name="title"
+		id='comment-title'
 		/>
 	<label for='title'>Subject</label>&nbsp;(optional)
 </div>
@@ -130,7 +140,16 @@
 </div>
 <div class='comment-form-website'>
 	<input type="url" placeholder='http://yourdomain.com' size="25" name="website" />
-	<label for='website''>Website</label>&nbsp;(optional)
+	<label for='website'>Website</label>&nbsp;(optional)
+</div>
+<div id='yuemail'>
+	<input
+		type="email"
+		placeholder='your.name@yourdomain.com'
+		size="25"
+		name="yuemail"
+		id='yuemail'
+		/>
 </div>
 <div class='comment-form-submit'>
 	<input type="submit" name="submit" value="Submit Comment" />
